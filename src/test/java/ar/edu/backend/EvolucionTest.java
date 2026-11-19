@@ -26,15 +26,17 @@ public class EvolucionTest {
         assertEquals(40.16, redondear(r.getCreditos().get(0).getTasaInteresAnual()));
     }
 
+    // Se contradice consigna con test dado, segun la consigna, si es RECHAZADO solo puede ser EN_MORA,
+    // pero la prueba tiene RECHAZADO,NORMAL, asi q es invalida
     @Test
     void limitesYClasificacion() throws IOException {
 
         var r = leer(
                 "CL5,BLACK,15000,3000,APROBADO,NORMAL\nCL1,P,15000,3000,APROBADO,NORMAL\nCL2,P,15000,0,PRE_AROBADO,EN_MORA\nCL3,P,15000,3000,APROBADO,EN_MORA\nCL3,P,15000,1000,RECHAZADO,NORMAL\n");
         assertEquals(5, r.getLeidas());
-        assertEquals(2, r.getProcesadas());
+        assertEquals(1, r.getProcesadas());
         assertEquals(1, r.getDescartadas());
-        assertEquals(2, r.getInvalidas());
+        assertEquals(3, r.getInvalidas());
         assertEquals(80, redondear(r.getCreditos().get(0).getScoreFinanciero()));
         assertEquals(56, redondear(r.getCreditos().get(0).getTasaInteresAnual()));
     }

@@ -49,19 +49,18 @@ public class ParserSolicitudes {
                         continue;
                     }
 
-                    // verifico los estados con la morosidad
                     if (tokens.length == 6) {
-                        // borro los espacios del estado y declaro morosidad
                         String estadoLimpio = tokens[4].strip();
-                        String morosidad = tokens[5];
-
-                        // si es aprobado o pre aprobado tiene q ser normal o en mora, sino error
-                        // si es rechazado solo acepta q sea en mora, otra cosa error
-                        if (List.of("APROBADO", "PRE_APROBADO","RECHAZADO").contains(estadoLimpio)) {
+                        String morosidad = tokens[5].strip();
+                    //  RECHAZADO solo admite EN_MORA otra cosa de morosidad seria invalido
+                        if (estadoLimpio.equals("RECHAZADO")) {
+                            if (!"EN_MORA".equals(morosidad)) {
+                                throw new IllegalArgumentException("Solicitud Rechazada solo admite EN_MORA");
+                            }
+                        } else if (List.of("APROBADO", "PRE_APROBADO").contains(estadoLimpio)) {
                             if (!List.of("NORMAL", "EN_MORA").contains(morosidad)) {
                                 throw new IllegalArgumentException("Aprobado o pre aprobado solo pueden recibir, normal o en mora");
                             }
-
                         } else {
                             throw new IllegalArgumentException("Estado desconocido");
                         }
